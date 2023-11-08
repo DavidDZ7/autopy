@@ -11,7 +11,7 @@ from PIL import Image, ImageTk
 import picamera
 import io
 import threading #use threading to improve camera stream flow
-
+import datetime
 
 #-------------------------------------------------------------------------
 # GPIO configuration
@@ -75,6 +75,7 @@ def stopCar(event):
 
 
 
+
 class App(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -83,42 +84,40 @@ class App(customtkinter.CTk):
         #Global variables
         #------------------------------------------------------------------------
         self.title("Autopy")
-        self.geometry("1250x1000+0+0")# Set the width,height of the window, and x and y coordinates
+        self.geometry("1366x768+0+0")# Set the width,height of the window, and x and y coordinates
         customtkinter.set_appearance_mode("dark")#sets the window/App in dark mode
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        print(f"Window size: {screen_width}x{screen_height}")
         
         #------------------------------------------------------------------------
         #GUI
         #------------------------------------------------------------------------
         #self.grid_columnconfigure(0, weight=1) # configure to expand columns horizontally
-            
-        screen_width = self.winfo_screenwidth()
-        screen_height = self.winfo_screenheight()
-        print(f"Window size: {screen_width}x{screen_height}")
         buttonsWidth=screen_width//8
         
         self.FORWARD = customtkinter.CTkButton(master=self,text="FORWARD",font=("Roboto",20), width=buttonsWidth, height=buttonsWidth, corner_radius=int(buttonsWidth*0.10))
-        self.FORWARD.grid(row=0, column=1, columnspan=1,padx=10, pady=10, sticky="N")
+        self.FORWARD.grid(row=0, column=1, padx=10, pady=10, columnspan=1, sticky="NW")
         self.FORWARD.bind('<ButtonPress-1>',go_forward)
         self.FORWARD.bind('<ButtonRelease-1>',stopCar)
         
         self.LEFT = customtkinter.CTkButton(master=self,text="LEFT", font=("Roboto",20), width=buttonsWidth, height=buttonsWidth, corner_radius=int(buttonsWidth*0.10))
-        self.LEFT.grid(row=1, column=0, padx=10, pady=10, sticky="NEW")
+        self.LEFT.grid(row=1, column=0, padx=10, pady=10, columnspan=1, sticky="NW")
         self.LEFT.bind('<ButtonPress-1>',go_LEFT)
         self.LEFT.bind('<ButtonRelease-1>',stopCar)
 
         self.RIGHT = customtkinter.CTkButton(master=self,text="RIGHT", font=("Roboto",20), width=buttonsWidth, height=buttonsWidth, corner_radius=int(buttonsWidth*0.10))
-        self.RIGHT.grid(row=1, column=2, padx=10, pady=10, sticky="NEW")
+        self.RIGHT.grid(row=1, column=2, padx=10, pady=10, columnspan=1, sticky="NW")
         self.RIGHT.bind('<ButtonPress-1>',go_RIGHT)
         self.RIGHT.bind('<ButtonRelease-1>',stopCar)
 
-
         self.REVERSE = customtkinter.CTkButton(master=self,text="REVERSE", font=("Roboto",20), width=buttonsWidth, height=buttonsWidth, corner_radius=int(buttonsWidth*0.10))
-        self.REVERSE.grid(row=2, column=1, padx=10, columnspan=1, pady=10, sticky="N")
+        self.REVERSE.grid(row=2, column=1, padx=10, pady=10, columnspan=1, sticky="NW")
         self.REVERSE.bind('<ButtonPress-1>',go_reverse)
         self.REVERSE.bind('<ButtonRelease-1>',stopCar)
 
-        self.closeApp = customtkinter.CTkButton(master=self,text="Close App", font=("Roboto",20), width=buttonsWidth,height=buttonsWidth//2)
-        self.closeApp.grid(row=3, column=0,columnspan=3, padx=10, pady=(40,10), sticky="NEW")
+        self.closeApp = customtkinter.CTkButton(master=self,text="Close App", font=("Roboto",20), width=int(0.98*screen_width/2),height=buttonsWidth//2)
+        self.closeApp.grid(row=3, column=0,columnspan=3, padx=5, pady=(40,10), sticky="NEW")
         self.closeApp.configure(command=close_app)
 
         #CAMERA
@@ -135,17 +134,30 @@ class App(customtkinter.CTk):
         self.update_thread.daemon = True
         self.update_thread.start()
 
+        self.cameraSaveButton = customtkinter.CTkButton(master=self,text="Save Image", font=("Roboto",20), width=int(0.98*screen_width/2), height=buttonsWidth//2)
+        self.cameraSaveButton.grid(row=3, column=3, columnspan=3, padx=5, pady=(40,10), sticky="NSEW")
+        self.cameraSaveButton.configure(command=self.saveCameraOutput)
+        
     def updateCameraLoop(self):
         for _ in self.camera.capture_continuous(self.stream, format='jpeg', use_video_port=True):
             self.stream.seek(0)
-            image = Image.open(self.stream)
+            self.image = Image.open(self.stream)
             
-            photo = customtkinter.CTkImage(dark_image=image, size=(640, 480))
-            self.label.configure(image=photo, text="")
-            self.label.image = photo
+            self.photo = customtkinter.CTkImage(dark_image=self.image, size=(640, 480))
+            self.label.configure(image=self.photo, text="")
+            self.label.image = self.photo
     
             self.stream.seek(0)
             self.stream.truncate()
+    
+    def saveCameraOutput(self):
+        # Get the current date and time
+        current_datetime = datetime.datetime.now()
+        # Convert the datetime object to a string in a specific format
+        date_time_string = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        # Save Camera Image
+        self.camera.capture(date_time_string+".jpg")
+        
 
 
 app = App()
