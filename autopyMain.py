@@ -124,6 +124,7 @@ class App(customtkinter.CTk):
         self.camera = picamera.PiCamera()
         self.camera.resolution = (640, 480)
         self.camera.vflip = True
+        self.camera.hflip = True
         self.camera.framerate = 30  # Adjust as needed
         
         self.label = customtkinter.CTkLabel(master=self)
