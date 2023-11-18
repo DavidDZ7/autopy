@@ -1,6 +1,19 @@
-# autopy
-
-A remote-controlled vehicle made with a Raspberry Pi 3 Model B
+<div align="center">
+  <h1>Autopy</h1>
+  
+  <h4>
+    A remote-controlled vehicle made with a Raspberry Pi 3 Model B and  a camera module<br>
+    Made by David Norman Díaz Estrada<br>
+    https://www.linkedin.com/in/dnde7/
+  </h4>
+  
+  ---
+  
+  <picture>
+    <img src="autopy.jpg" width="600">
+  </picture>
+  
+</div>
 
 
 
@@ -60,5 +73,13 @@ Run the main script:
 python autopyMain.py
 ```
 
+
+------------------
+**Hardware setup**<br/>
+------------------
+
+  <picture>
+    <img src="autopyConnections1.jpg" width="600">
+  </picture>
 
 
