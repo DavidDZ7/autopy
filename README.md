@@ -82,4 +82,7 @@ python autopyMain.py
     <img src="autopyConnections1.jpg" width="600">
   </picture>
 
+  <picture>
+    <img src="autopyConnectionsDiagram.jpg" width="600">
+  </picture>
 
