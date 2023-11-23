@@ -10,11 +10,26 @@
   ---
   
   <picture>
-    <img src="autopy.jpg" width="600">
+    <img src="autopy.jpg" width="600">    
+  </picture>
+  <picture>
+    <img src="autopyGUIexample.jpg" width="600">    
   </picture>
   
 </div>
 
+
+
+------------------
+**Hardware setup**<br/>
+------------------
+  <picture>
+    <img src="autopyConnectionsDiagram.jpg" width="600">
+  </picture>
+  
+  <picture>
+    <img src="autopyConnections1.jpg" width="600">
+  </picture>
 
 
 ------------------
@@ -72,17 +87,4 @@ Run the main script:
 ```
 python autopyMain.py
 ```
-
-
-------------------
-**Hardware setup**<br/>
-------------------
-
-  <picture>
-    <img src="autopyConnections1.jpg" width="600">
-  </picture>
-
-  <picture>
-    <img src="autopyConnectionsDiagram.jpg" width="600">
-  </picture>
 
